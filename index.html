@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro macOS Desktop</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            height: 100vh;
+            overflow: hidden;
+            cursor: url('assets/cursor/Jeelh-Retro-Cursors/Jeelh-Cursor-Dark/Normal Select.cur'), auto;
+        }
+
+        /* Menu Bar */
+        .menu-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 24px;
+            background: linear-gradient(to bottom, #d0d0d0, #a0a0a0);
+            border-bottom: 1px solid #808080;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 8px;
+            font-size: 12px;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .menu-left {
+            display: flex;
+            gap: 16px;
+        }
+
+        .menu-item {
+            color: #000;
+            cursor: url('assets/cursor/Jeelh-Retro-Cursors/Jeelh-Cursor-Dark/Select.cur'), pointer;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+
+        .menu-item:hover {
+            background: rgba(0,0,0,0.1);
+        }
+
+        .menu-right {
+            color: #000;
+            font-weight: bold;
+        }
+
+        /* Desktop */
+        .desktop {
+            position: fixed;
+            top: 24px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .welcome-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Dancing Script', cursive;
+            font-size: 15vw;
+            color: rgba(255, 255, 255, 0.4);
+            user-select: none;
+            pointer-events: none;
+        }
+
+        /* Desktop Icons */
+        .desktop-icon {
+            position: absolute;
+            width: 64px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: url('assets/cursor/Jeelh-Retro-Cursors/Jeelh-Cursor-Dark/Select.cur'), pointer;
+            user-select: none;
+            z-index: 10;
+        }
+
+        .desktop-icon:hover {
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+
+        .icon-image {
+            width: 48px;
+            height: 48px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin-bottom: 4px;
+        }
+
+        .icon-label {
+            color: white;
+            font-size: 11px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            word-wrap: break-word;
+            max-width: 64px;
+        }
+
+        /* Window Styles */
+        .window {
+            position: absolute;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            border-radius: 4px;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+            min-width: 300px;
+            min-height: 200px;
+            z-index: 100;
+        }
+
+        .window.active {
+            z-index: 200;
+            border: 2px inset #c0c0c0;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+        }
+
+        .window-title-bar {
+            background: linear-gradient(to bottom, #0a246a, #a6caf0);
+            color: white;
+            padding: 4px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: url('assets/cursor/Jeelh-Retro-Cursors/Jeelh-Cursor-Dark/Move.cur'), move;
+            user-select: none;
+            border-radius: 2px 2px 0 0;
+        }
+
+        .window-title {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 4px;
+        }
+
+        .window-control {
+            width: 16px;
+            height: 14px;
+            border: 1px outset #c0c0c0;
+            background: #c0c0c0;
+            cursor: url('assets/cursor/Jeelh-Retro-Cursors/Jeelh-Cursor-Dark/Select.cur'), pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #000;
+        }
+
+        .window-control:hover {
+            background: #d0d0d0;
+        }
+
+        .close-button:hover {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .window-content {
+            padding: 8px;
+            background: #c0c0c0;
+            height: calc(100% - 24px);
+            overflow: auto;
+            border-radius: 0 0 2px 2px;
+        }
+
+        /* Resize Handles */
+        .resize-handle {
+            position: absolute;
+            background: transparent;
+        }
+
+        .resize-nw {
+            top: -4px;
+            left: -4px;
+            width: 8px;
+            height: 8px;
+            cursor: url('assets/cursor/Jeelh-Retro-Cursors/Jeelh-Cursor-Dark/Diagonal Resize 1.cur'), nw-resize;
+        }
+
+        .resize-ne {
+            top: -4px;
+            right: -4px;
+            width: 8px;
+            height: 8px;
+            cursor: url('assets/cursor/Jeelh-Retro-Cursors/Jeelh-Cursor-Dark/Diagonal Resize 2.cur'), ne-resize;
+        }
+
+        .resize-sw {
+            bottom: -4px;
+            left: -4px;
+            width: 8px;
+            height: 8px;
+            cursor: url('assets/cursor/Jeelh-Retro-Cursors/Jeelh-Cursor-Dark/Diagonal Resize 2.cur'), sw-resize;
+        }
+
+        .resize-se {
+            bottom: -4px;
+            right: -4px;
+            width: 8px;
+            height: 8px;
+            cursor: url('assets/cursor/Jeelh-Retro-Cursors/Jeelh-Cursor-Dark/Diagonal Resize 1.cur'), se-resize;
+        }
+
+        .resize-n {
+            top: -4px;
+            left: 8px;
+            right: 8px;
+            height: 8px;
+            cursor: url('assets/cursor/Jeelh-Retro-Cursors/Jeelh-Cursor-Dark/Verticle Resize.cur'), n-resize;
+        }
+
+        .resize-s {
+            bottom: -4px;
+            left: 8px;
+            right: 8px;
+            height: 8px;
+            cursor: url('assets/cursor/Jeelh-Retro-Cursors/Jeelh-Cursor-Dark/Verticle Resize.cur'), s-resize;
+        }
+
+        .resize-w {
+            top: 8px;
+            bottom: 8px;
+            left: -4px;
+            width: 8px;
+            cursor: url('assets/cursor/Jeelh-Retro-Cursors/Jeelh-Cursor-Dark/Horizontal Resize.cur'), w-resize;
+        }
+
+        .resize-e {
+            top: 8px;
+            bottom: 8px;
+            right: -4px;
+            width: 8px;
+            cursor: url('assets/cursor/Jeelh-Retro-Cursors/Jeelh-Cursor-Dark/Horizontal Resize.cur'), e-resize;
+        }
+
+        /* Content Styles */
+        .window-content h3 {
+            color: #000;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .window-content p {
+            color: #000;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        /* Folder Window Styles */
+        .folder-window .window-content {
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+        }
+
+        .folder-toolbar {
+            background: #d0d0d0;
+            border-bottom: 1px solid #808080;
+            padding: 4px 8px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .folder-button {
+            background: #c0c0c0;
+            border: 1px outset #c0c0c0;
+            padding: 2px 8px;
+            font-size: 11px;
+            cursor: url('assets/cursor/Jeelh-Retro-Cursors/Jeelh-Cursor-Dark/Select.cur'), pointer;
+            color: #000;
+        }
+
+        .folder-button:hover {
+            background: #d0d0d0;
+        }
+
+        .folder-button:active {
+            border: 1px inset #c0c0c0;
+        }
+
+        .folder-content {
+            flex: 1;
+            padding: 8px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 8px;
+            overflow: auto;
+        }
+
+        .folder-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 4px;
+            cursor: url('assets/cursor/Jeelh-Retro-Cursors/Jeelh-Cursor-Dark/Select.cur'), pointer;
+            border-radius: 2px;
+            min-height: 60px;
+        }
+
+        .folder-item:hover {
+            background: rgba(0,0,0,0.1);
+        }
+
+        .folder-item.selected {
+            background: rgba(0,0,255,0.2);
+        }
+
+        .folder-item-icon {
+            width: 32px;
+            height: 32px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin-bottom: 2px;
+        }
+
+        .folder-item-label {
+            font-size: 10px;
+            color: #000;
+            text-align: center;
+            word-wrap: break-word;
+            max-width: 80px;
+        }
+
+        /* Text Box Styles */
+        .text-box {
+            background: white;
+            border: 1px inset #c0c0c0;
+            padding: 4px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 11px;
+            color: #000;
+            resize: both;
+            min-width: 100px;
+            min-height: 60px;
+            overflow: auto;
+        }
+
+        .text-box:focus {
+            outline: 2px solid #0000ff;
+        }
+
+        /* Image Styles */
+        .image-container {
+            border: 1px inset #c0c0c0;
+            background: white;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 100px;
+            min-height: 60px;
+            position: relative;
+        }
+
+        .image-placeholder {
+            color: #666;
+            font-size: 10px;
+            text-align: center;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        /* Busy cursor for loading states */
+        .busy {
+            cursor: url('assets/cursor/Jeelh-Retro-Cursors/Jeelh-Cursor-Dark/Busy.ani'), wait;
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu Bar -->
+    <div class="menu-bar">
+        <div class="menu-left">
+            <span class="menu-item">🍌</span>
+            <span class="menu-item">File</span>
+            <span class="menu-item">Edit</span>
+            <span class="menu-item">View</span>
+            <span class="menu-item">Special</span>
+        </div>
+        <div class="menu-right" id="clock">
+            <!-- Clock will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Desktop -->
+    <div class="desktop" id="desktop">
+        <div class="welcome-message">bernie</div>
+        <!-- Desktop Icons -->
+        <div class="desktop-icon" style="top: 20px; left: 20px;" data-window-title="Finder" data-icon="1.png" data-type="finder-app">
+            <div class="icon-image" style="background-image: url('assets/icons/png 64px/1.png');"></div>
+            <div class="icon-label">Read First</div>
+        </div>
+
+        <div class="desktop-icon" style="top: 20px; left: 100px;" data-window-title="TextEdit" data-icon="2.png">
+            <div class="icon-image" style="background-image: url('assets/icons/png 64px/2.png');"></div>
+            <div class="icon-label">TextEdit</div>
+        </div>
+
+        <div class="desktop-icon" style="top: 20px; left: 180px;" data-window-title="Calculator" data-icon="3.png">
+            <div class="icon-image" style="background-image: url('assets/icons/png 64px/3.png');"></div>
+            <div class="icon-label">Calculator</div>
+        </div>
+
+        <div class="desktop-icon" style="top: 120px; left: 20px;" data-window-title="Projects" data-icon="24.png" data-type="projects-folder">
+            <div class="icon-image" style="background-image: url('assets/icons/png 64px/24.png');"></div>
+            <div class="icon-label">Projects</div>
+        </div>
+
+        <div class="desktop-icon" style="top: 120px; left: 100px;" data-window-title="watch" data-icon="24.png" data-type="folder">
+            <div class="icon-image" style="background-image: url('assets/icons/png 64px/24.png');"></div>
+            <div class="icon-label">Watch</div>
+        </div>
+
+        <div class="desktop-icon" style="top: 120px; left: 180px;" data-window-title="Citi" data-icon="24.png" data-type="folder">
+            <div class="icon-image" style="background-image: url('assets/icons/png 64px/24.png');"></div>
+            <div class="icon-label">Citi</div>
+        </div>
+
+        <div class="desktop-icon" style="top: 220px; left: 20px;" data-window-title="LinkedIn" data-icon="linkedin.png" data-type="link" data-url="https://www.linkedin.com/in/bernardolopezleon/">
+            <div class="icon-image" style="background-image: url('assets/icons/png 64px/LinkedIn.png');"></div>
+            <div class="icon-label">LinkedIn</div>
+        </div>
+
+        <div class="desktop-icon" style="top: 220px; left: 100px;" data-window-title="YouTube" data-icon="youtube.png" data-type="link" data-url="https://www.youtube.com/@bloopz/featured">
+            <div class="icon-image" style="background-image: url('assets/icons/png 64px/youtube-logo.png');"></div>
+            <div class="icon-label">YouTube</div>
+        </div>
+
+        <div class="desktop-icon" style="top: 220px; left: 180px;" data-window-title="Instagram" data-icon="instagram.png" data-type="link" data-url="https://www.instagram.com/bernie_log_/">
+            <div class="icon-image" style="background-image: url('assets/icons/png 64px/instagram.jpg');"></div>
+            <div class="icon-label">Instagram</div>
+        </div>
+    </div>
+
+    <script>
+        class WindowManager {
+            constructor() {
+                this.windows = [];
+                this.nextZIndex = 100;
+                this.isDragging = false;
+                this.isResizing = false;
+                this.dragData = null;
+                this.resizeData = null;
+                
+                this.init();
+            }
+
+            init() {
+                this.setupClock();
+                this.setupDesktopIcons();
+                this.setupEventListeners();
+            }
+
+            setupClock() {
+                const clockElement = document.getElementById('clock');
+                
+                const updateClock = () => {
+                    const now = new Date();
+                    const timeString = now.toLocaleTimeString('en-US', {
+                        hour12: false,
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    });
+                    clockElement.textContent = timeString;
+                };
+
+                updateClock();
+                setInterval(updateClock, 1000);
+            }
+
+            setupDesktopIcons() {
+                const icons = document.querySelectorAll('.desktop-icon');
+                icons.forEach(icon => {
+                    icon.addEventListener('dblclick', (e) => {
+                        e.preventDefault();
+                        const title = icon.dataset.windowTitle;
+                        const iconFile = icon.dataset.icon;
+                        const type = icon.dataset.type || 'app';
+                        const url = icon.dataset.url;
+
+                        if (type === 'link' && url) {
+                            window.open(url, '_blank');
+                        } else {
+                            this.openWindow(title, iconFile, type);
+                        }
+                    });
+                });
+            }
+
+            setupEventListeners() {
+                document.addEventListener('mousedown', this.handleMouseDown.bind(this));
+                document.addEventListener('mousemove', this.handleMouseMove.bind(this));
+                document.addEventListener('mouseup', this.handleMouseUp.bind(this));
+            }
+
+            openWindow(title, iconFile, type = 'app') {
+                const windowId = `window-${Date.now()}`;
+                
+                let windowElement;
+                if (type === 'folder') {
+                    windowElement = this.createFolderWindowElement(windowId, title, iconFile);
+                } else if (type === 'finder-app') {
+                    windowElement = this.createFinderWindowElement(windowId, title, iconFile);
+                } else if (type === 'projects-folder') {
+                    windowElement = this.createProjectsFolderWindowElement(windowId, title, iconFile);
+                } else {
+                    windowElement = this.createWindowElement(windowId, title, iconFile);
+                }
+                
+                document.getElementById('desktop').appendChild(windowElement);
+
+                if (type === 'folder' && title === 'watch') {
+                    this.addWatchFolderContent(windowId);
+                } else if (type === 'folder' && title === 'Citi') {
+                    this.addCitiFolderContent(windowId);
+                } else if (type === 'projects-folder') {
+                    this.addProjectFolders(windowId);
+                }
+
+                this.windows.push({
+                    id: windowId,
+                    element: windowElement,
+                    zIndex: this.nextZIndex++,
+                    type: type
+                });
+
+                this.bringToFront(windowId);
+            }
+
+            createWindowElement(id, title, iconFile) {
+                const window = document.createElement('div');
+                window.className = 'window';
+                window.id = id;
+                window.style.left = Math.random() * 200 + 50 + 'px';
+                window.style.top = Math.random() * 100 + 50 + 'px';
+                window.style.width = '400px';
+                window.style.height = '300px';
+
+                window.innerHTML = `
+                    <div class="window-title-bar">
+                        <span class="window-title">${title}</span>
+                        <div class="window-controls">
+                            <div class="window-control close-button" data-action="close">×</div>
+                            <div class="window-control" data-action="maximize">□</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
+                        <h3>Welcome to ${title}</h3>
+                        <p>This is a placeholder window for the ${title} application.</p>
+                        <p>You can drag this window around by its title bar, resize it from the corners, and close it using the × button.</p>
+                        <p>Double-click any desktop icon to open a new window!</p>
+                    </div>
+                    <div class="resize-handle resize-nw"></div>
+                    <div class="resize-handle resize-ne"></div>
+                    <div class="resize-handle resize-sw"></div>
+                    <div class="resize-handle resize-se"></div>
+                    <div class="resize-handle resize-n"></div>
+                    <div class="resize-handle resize-s"></div>
+                    <div class="resize-handle resize-w"></div>
+                    <div class="resize-handle resize-e"></div>
+                `;
+
+                // Add event listeners for window controls
+                const closeButton = window.querySelector('.close-button');
+                closeButton.addEventListener('click', () => this.closeWindow(id));
+
+                // Add click listener to bring window to front
+                window.addEventListener('mousedown', (e) => {
+                    if (e.target.closest('.window-control')) return;
+                    this.bringToFront(id);
+                });
+
+                return window;
+            }
+
+            createFinderWindowElement(id, title, iconFile) {
+                const window = document.createElement('div');
+                window.className = 'window';
+                window.id = id;
+                window.style.left = Math.random() * 200 + 50 + 'px';
+                window.style.top = Math.random() * 100 + 50 + 'px';
+                window.style.width = '450px';
+                window.style.height = '350px';
+
+                window.innerHTML = `
+                    <div class="window-title-bar">
+                        <span class="window-title">${title}</span>
+                        <div class="window-controls">
+                            <div class="window-control close-button" data-action="close">×</div>
+                            <div class="window-control" data-action="maximize">□</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
+                        <h3>Welcome to my Portfolio OS!</h3>
+                        <p>This is an interactive website designed to look and feel like a classic desktop operating system. Here's how to navigate:</p>
+                        <p><strong>Desktop Icons:</strong> Double-click any icon on the desktop to open an application or a folder.</p>
+                        <p><strong>Windows:</strong> You can drag windows by their title bar, resize them from the edges, and close them with the '×' button. The active window will always be on top.</p>
+                        <p><strong>Folders:</strong> The 'Projects' folder contains details about my work. You can open sub-folders and read text files inside.</p>
+                        <p>Feel free to explore!</p>
+                    </div>
+                    <div class="resize-handle resize-nw"></div>
+                    <div class="resize-handle resize-ne"></div>
+                    <div class="resize-handle resize-sw"></div>
+                    <div class="resize-handle resize-se"></div>
+                    <div class="resize-handle resize-n"></div>
+                    <div class="resize-handle resize-s"></div>
+                    <div class="resize-handle resize-w"></div>
+                    <div class="resize-handle resize-e"></div>
+                `;
+
+                // Add event listeners for window controls
+                const closeButton = window.querySelector('.close-button');
+                closeButton.addEventListener('click', () => this.closeWindow(id));
+
+                // Add click listener to bring window to front
+                window.addEventListener('mousedown', (e) => {
+                    if (e.target.closest('.window-control')) return;
+                    this.bringToFront(id);
+                });
+
+                return window;
+            }
+
+            createFolderWindowElement(id, title, iconFile) {
+                const window = document.createElement('div');
+                window.className = 'window folder-window';
+                window.id = id;
+                window.style.left = Math.random() * 200 + 50 + 'px';
+                window.style.top = Math.random() * 100 + 50 + 'px';
+                window.style.width = '500px';
+                window.style.height = '400px';
+
+                window.innerHTML = `
+                    <div class="window-title-bar">
+                        <span class="window-title">${title}</span>
+                        <div class="window-controls">
+                            <div class="window-control close-button" data-action="close">×</div>
+                            <div class="window-control" data-action="maximize">□</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
+                        <div class="folder-toolbar">
+                            <button class="folder-button" data-action="open-all">Open All</button>
+                        </div>
+                        <div class="folder-content" id="folder-content-${id}">
+                            <!-- Folder items will be added here -->
+                        </div>
+                    </div>
+                    <div class="resize-handle resize-nw"></div>
+                    <div class="resize-handle resize-ne"></div>
+                    <div class="resize-handle resize-sw"></div>
+                    <div class="resize-handle resize-se"></div>
+                    <div class="resize-handle resize-n"></div>
+                    <div class="resize-handle resize-s"></div>
+                    <div class="resize-handle resize-w"></div>
+                    <div class="resize-handle resize-e"></div>
+                `;
+
+                // Add event listeners for folder controls
+                const closeButton = window.querySelector('.close-button');
+                closeButton.addEventListener('click', () => this.closeWindow(id));
+
+                const openAllButton = window.querySelector('[data-action="open-all"]');
+                openAllButton.addEventListener('click', () => this.openAllItemsInFolder(id));
+
+                // Add click listener to bring window to front
+                window.addEventListener('mousedown', (e) => {
+                    if (e.target.closest('.window-control') || e.target.closest('.folder-button')) return;
+                    this.bringToFront(id);
+                });
+
+                return window;
+            }
+
+            createProjectsFolderWindowElement(id, title, iconFile) {
+                const window = document.createElement('div');
+                window.className = 'window folder-window';
+                window.id = id;
+                window.style.left = Math.random() * 200 + 50 + 'px';
+                window.style.top = Math.random() * 100 + 50 + 'px';
+                window.style.width = '600px';
+                window.style.height = '500px';
+
+                window.innerHTML = `
+                    <div class="window-title-bar">
+                        <span class="window-title">${title}</span>
+                        <div class="window-controls">
+                            <div class="window-control close-button" data-action="close">×</div>
+                            <div class="window-control" data-action="maximize">□</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
+                        <div class="folder-toolbar">
+                            <button class="folder-button" data-action="open-all">Open All</button>
+                        </div>
+                        <div class="folder-content" id="folder-content-${id}">
+                            <!-- Project folders will be added here -->
+                        </div>
+                    </div>
+                    <div class="resize-handle resize-nw"></div>
+                    <div class="resize-handle resize-ne"></div>
+                    <div class="resize-handle resize-sw"></div>
+                    <div class="resize-handle resize-se"></div>
+                    <div class="resize-handle resize-n"></div>
+                    <div class="resize-handle resize-s"></div>
+                    <div class="resize-handle resize-w"></div>
+                    <div class="resize-handle resize-e"></div>
+                `;
+
+                // Add event listeners for folder controls
+                const closeButton = window.querySelector('.close-button');
+                closeButton.addEventListener('click', () => this.closeWindow(id));
+
+                const openAllButton = window.querySelector('[data-action="open-all"]');
+                openAllButton.addEventListener('click', () => this.openAllItemsInFolder(id));
+
+                // Add click listener to bring window to front
+                window.addEventListener('mousedown', (e) => {
+                    if (e.target.closest('.window-control') || e.target.closest('.folder-button')) return;
+                    this.bringToFront(id);
+                });
+
+                return window;
+            }
+
+            addProjectFolders(folderId) {
+                const folderContent = document.getElementById(`folder-content-${folderId}`);
+                
+                if (!folderContent) {
+                    return;
+                }
+
+                // Project 1: Fluent Form
+                const fluentFormFolder = document.createElement('div');
+                fluentFormFolder.className = 'folder-item';
+                fluentFormFolder.innerHTML = `
+                    <div class="folder-item-icon" style="background-image: url('assets/icons/png 64px/24.png');"></div>
+                    <div class="folder-item-label">Fluent Form</div>
+                `;
+                fluentFormFolder.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.selectFolderItem(fluentFormFolder);
+                });
+                fluentFormFolder.addEventListener('dblclick', (e) => {
+                    e.stopPropagation();
+                    this.openProjectFolder('Fluent Form', 'fluent-form');
+                });
+                folderContent.appendChild(fluentFormFolder);
+
+                // Project 2: RideABull
+                const rideABullFolder = document.createElement('div');
+                rideABullFolder.className = 'folder-item';
+                rideABullFolder.innerHTML = `
+                    <div class="folder-item-icon" style="background-image: url('assets/icons/png 64px/24.png');"></div>
+                    <div class="folder-item-label">RideABull</div>
+                `;
+                rideABullFolder.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.selectFolderItem(rideABullFolder);
+                });
+                rideABullFolder.addEventListener('dblclick', (e) => {
+                    e.stopPropagation();
+                    this.openProjectFolder('RideABull', 'rideabull');
+                });
+                folderContent.appendChild(rideABullFolder);
+
+                // Project 3: Front Running
+                const frontRunningFolder = document.createElement('div');
+                frontRunningFolder.className = 'folder-item';
+                frontRunningFolder.innerHTML = `
+                    <div class="folder-item-icon" style="background-image: url('assets/icons/png 64px/24.png');"></div>
+                    <div class="folder-item-label">Front Running</div>
+                `;
+                frontRunningFolder.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.selectFolderItem(frontRunningFolder);
+                });
+                frontRunningFolder.addEventListener('dblclick', (e) => {
+                    e.stopPropagation();
+                    this.openProjectFolder('Front Running', 'front-running');
+                });
+                folderContent.appendChild(frontRunningFolder);
+
+                // Add a sample text document to the Projects folder
+                const textDoc = document.createElement('div');
+                textDoc.className = 'folder-item';
+                textDoc.innerHTML = `
+                    <div class="folder-item-icon" style="background-image: url('assets/icons/png 64px/10.png');"></div>
+                    <div class="folder-item-label">README.txt</div>
+                `;
+                textDoc.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.selectFolderItem(textDoc);
+                });
+                textDoc.addEventListener('dblclick', (e) => {
+                    e.stopPropagation();
+                    const readmeContent = 'This folder contains all of my proudest projects. Enjoy learning about all my projects on my journey to invent. ';
+                    this.openTextEditAppWithContent('README', readmeContent);
+                });
+                folderContent.appendChild(textDoc);
+            }
+
+            openProjectFolder(projectName, projectId) {
+                const windowId = `project-${projectId}-${Date.now()}`;
+                const windowElement = this.createProjectFolderWindow(windowId, projectName, projectId);
+                
+                document.getElementById('desktop').appendChild(windowElement);
+                this.addProjectContent(windowId, projectName);
+
+                this.windows.push({
+                    id: windowId,
+                    element: windowElement,
+                    zIndex: this.nextZIndex++,
+                    type: 'project-folder'
+                });
+
+                this.bringToFront(windowId);
+            }
+
+            createProjectFolderWindow(id, projectName, projectId) {
+                const window = document.createElement('div');
+                window.className = 'window folder-window';
+                window.id = id;
+                window.style.left = Math.random() * 200 + 50 + 'px';
+                window.style.top = Math.random() * 100 + 50 + 'px';
+                window.style.width = '500px';
+                window.style.height = '400px';
+
+                window.innerHTML = `
+                    <div class="window-title-bar">
+                        <span class="window-title">${projectName}</span>
+                        <div class="window-controls">
+                            <div class="window-control close-button" data-action="close">×</div>
+                            <div class="window-control" data-action="maximize">□</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
+                        <div class="folder-toolbar">
+                            <button class="folder-button" data-action="open-all">Open All</button>
+                        </div>
+                        <div class="folder-content" id="folder-content-${id}">
+                            <!-- Project content will be added here -->
+                        </div>
+                    </div>
+                    <div class="resize-handle resize-nw"></div>
+                    <div class="resize-handle resize-ne"></div>
+                    <div class="resize-handle resize-sw"></div>
+                    <div class="resize-handle resize-se"></div>
+                    <div class="resize-handle resize-n"></div>
+                    <div class="resize-handle resize-s"></div>
+                    <div class="resize-handle resize-w"></div>
+                    <div class="resize-handle resize-e"></div>
+                `;
+
+                // Add event listeners for folder controls
+                const closeButton = window.querySelector('.close-button');
+                closeButton.addEventListener('click', () => this.closeWindow(id));
+
+                const openAllButton = window.querySelector('[data-action="open-all"]');
+                openAllButton.addEventListener('click', () => this.openAllItemsInFolder(id));
+
+                // Add click listener to bring window to front
+                window.addEventListener('mousedown', (e) => {
+                    if (e.target.closest('.window-control') || e.target.closest('.folder-button')) return;
+                    this.bringToFront(id);
+                });
+
+                return window;
+            }
+
+            addProjectContent(folderId, projectName) {
+                const folderContent = document.getElementById(`folder-content-${folderId}`);
+                
+                if (!folderContent) {
+                    return;
+                }
+
+                // Add project description text file
+                const descriptionDoc = document.createElement('div');
+                descriptionDoc.className = 'folder-item';
+                descriptionDoc.innerHTML = `
+                    <div class="folder-item-icon" style="background-image: url('assets/icons/png 64px/10.png');"></div>
+                    <div class="folder-item-label">Description</div>
+                `;
+                descriptionDoc.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.selectFolderItem(descriptionDoc);
+                });
+                descriptionDoc.addEventListener('dblclick', (e) => {
+                    e.stopPropagation();
+                    this.openTextEditAppWithContent(`${projectName} - Description`, this.getDefaultProjectText(projectName));
+                });
+                folderContent.appendChild(descriptionDoc);
+
+                // Add project screenshot image file
+                const screenshotDoc = document.createElement('div');
+                screenshotDoc.className = 'folder-item';
+                screenshotDoc.innerHTML = `
+                    <div class="folder-item-icon" style="background-image: url('assets/icons/png 64px/69.png');"></div>
+                    <div class="folder-item-label">Screenshot</div>
+                `;
+                screenshotDoc.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.selectFolderItem(screenshotDoc);
+                });
+                screenshotDoc.addEventListener('dblclick', (e) => {
+                    e.stopPropagation();
+                    this.openImageViewerApp(`${projectName} - Screenshot`);
+                });
+                folderContent.appendChild(screenshotDoc);
+            }
+
+            getDefaultProjectText(projectName) {
+                const defaultTexts = {
+                    'Fluent Form': `Fluent Form
+
+Project Overview:
+Fluent Form is a speech therapy app designed to help people with speech impediments pronounce words correctly. 
+
+Features:
+- Phonetic speech analysis
+- Mouth mapping
+- Need based practice
+- AI generated summary of progress
+
+Technologies Used:
+- Microsoft Azzure Speech to text
+- Node.js
+- OpenAI API
+- Express.js
+- Wav file manipulation
+
+Status:
+Completed
+
+Conclusion:
+- First place in Society for Hispanic Engineers Hackathon 🏆`,
+                    
+                    'RideABull': `RideABull
+
+Project Overview:
+RideABull is a ridesharing app for college students that connects riders with drivers in a safe manner.
+
+Features:
+- Secured authentication
+- Ride mangagement
+- CO2 tracking
+- Customizable profiles
+
+
+Technologies Used:
+- Node.js
+- MongoDB Atlas
+- Google OAuth
+- Google Maps API
+- Bcrypt Hash
+
+Status:
+Completed
+
+Conclusion: 
+- Best use of MongoDB Atlas 🏆
+- Learned about Zero Knowledge Proofs`,
+                    
+                    'Front Running': `Front Running
+
+Project Overview:
+Front Running detection is a tool to detect unethical trading practices in decentralized finance.
+
+Features:
+- Under Construction
+
+Technologies Used:
+- Under Construction
+
+Status:
+In Development
+
+Next Steps:
+- Collect Data from the mempool
+- Train a model to detect front running
+- Create a presentable dashboard`,
+                };
+                
+                return defaultTexts[projectName] || `# ${projectName}
+
+## Project Overview
+This is a placeholder description for ${projectName}.
+
+## Features
+- Feature 1
+- Feature 2
+- Feature 3
+
+## Technologies Used
+- Technology 1
+- Technology 2
+- Technology 3
+
+## Status
+In Development
+
+## Next Steps
+- Next step 1
+- Next step 2
+- Next step 3`;
+            }
+
+            addWatchFolderContent(folderId) {
+                const folderContent = document.getElementById(`folder-content-${folderId}`);
+                if (!folderContent) return;
+
+                // Add a text file
+                const textDoc = document.createElement('div');
+                textDoc.className = 'folder-item';
+                textDoc.innerHTML = `
+                    <div class="folder-item-icon" style="background-image: url('assets/icons/png 64px/10.png');"></div>
+                    <div class="folder-item-label">Details.txt</div>
+                `;
+                textDoc.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.selectFolderItem(textDoc);
+                });
+                textDoc.addEventListener('dblclick', (e) => {
+                    e.stopPropagation();
+                    const watchContent = 'Building this watch started with a simple problem:\n\nI could not find a watch I truly loved. The ones I could afford did not excite me, and the ones that did were way out of my budget. So, I figured, why not build my own? This project became a crash course in horology, where I got to choose every piece, from the gears to the hands, making it exactly what I wanted. It is proof that with some patience and a lot of tinkering, you do not have to settle for what is on the shelf—you can create something truly unique. \n\nAll of the parts were ordered from Aliexpress and recicled from old watches. Including the tools required and all the materials, the total came out under $100 dollars. Powered by a Seiko NH36 movement and has glow in the dark hands. The watch band is form an old Lacoste watch.';
+                    this.openTextEditAppWithContent('Watch Details', watchContent);
+                });
+                folderContent.appendChild(textDoc);
+
+                // Add first image file
+                const imageDoc1 = document.createElement('div');
+                imageDoc1.className = 'folder-item';
+                imageDoc1.innerHTML = `
+                    <div class="folder-item-icon" style="background-image: url('assets/icons/png 64px/69.png');"></div>
+                    <div class="folder-item-label">Watch Front.jpg</div>
+                `;
+                imageDoc1.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.selectFolderItem(imageDoc1);
+                });
+                imageDoc1.addEventListener('dblclick', (e) => {
+                    e.stopPropagation();
+                    this.openImageViewerApp('Watch Front', 'assets/images/IMG_20250921_185254445.jpg');
+                });
+                folderContent.appendChild(imageDoc1);
+
+                // Add second image file
+                const imageDoc2 = document.createElement('div');
+                imageDoc2.className = 'folder-item';
+                imageDoc2.innerHTML = `
+                    <div class="folder-item-icon" style="background-image: url('assets/icons/png 64px/69.png');"></div>
+                    <div class="folder-item-label">Watch Back.jpg</div>
+                `;
+                imageDoc2.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.selectFolderItem(imageDoc2);
+                });
+                imageDoc2.addEventListener('dblclick', (e) => {
+                    e.stopPropagation();
+                    this.openImageViewerApp('Watch Back', 'assets/images/IMG_20250921_185333776.jpg');
+                });
+                folderContent.appendChild(imageDoc2);
+            }
+
+            addCitiFolderContent(folderId) {
+                const folderContent = document.getElementById(`folder-content-${folderId}`);
+                if (!folderContent) return;
+
+                // Add a text file
+                const textDoc = document.createElement('div');
+                textDoc.className = 'folder-item';
+                textDoc.innerHTML = `
+                    <div class="folder-item-icon" style="background-image: url('assets/icons/png 64px/10.png');"></div>
+                    <div class="folder-item-label">Internship.txt</div>
+                `;
+                textDoc.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.selectFolderItem(textDoc);
+                });
+                textDoc.addEventListener('dblclick', (e) => {
+                    e.stopPropagation();
+                    const citiContent = 'Over the summer of 2025, I interned at Citi as a Project Manager. I worked on program briefs and letters of authentication for all the Citi Retial Cards servicing communicaitons phone short codes. Additionally, while trying to teach my team about AI, I developed a video pioneering the use of AI to write PowerShell scripts for file management in non technical teams within Citi. This video reached the AI Ambassador team which is encharged of AI implementation within Citi. It was used by the AI Ambassador team at Citi with over 600 people to increase the use of internal AI tools by using me as an example of how interns can teach teams about AI tool usage.';
+                    this.openTextEditAppWithContent('Citi Internship', citiContent);
+                });
+                folderContent.appendChild(textDoc);
+
+                // Add first image file
+                const imageDoc1 = document.createElement('div');
+                imageDoc1.className = 'folder-item';
+                imageDoc1.innerHTML = `
+                    <div class="folder-item-icon" style="background-image: url('assets/icons/png 64px/69.png');"></div>
+                    <div class="folder-item-label">Citi.jpg</div>
+                `;
+                imageDoc1.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.selectFolderItem(imageDoc1);
+                });
+                imageDoc1.addEventListener('dblclick', (e) => {
+                    e.stopPropagation();
+                    this.openImageViewerApp('Citi ', 'assets/images/Citi1.jpg');
+                });
+                folderContent.appendChild(imageDoc1);
+
+                // Add second image file
+                const imageDoc2 = document.createElement('div');
+                imageDoc2.className = 'folder-item';
+                imageDoc2.innerHTML = `
+                    <div class="folder-item-icon" style="background-image: url('assets/icons/png 64px/69.png');"></div>
+                    <div class="folder-item-label">Citi Bike.jpg</div>
+                `;
+                imageDoc2.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.selectFolderItem(imageDoc2);
+                });
+                imageDoc2.addEventListener('dblclick', (e) => {
+                    e.stopPropagation();
+                    this.openImageViewerApp('Citi Bike', 'assets/images/Citi2.jpg');
+                });
+                folderContent.appendChild(imageDoc2);
+
+                // Add third image file
+                const imageDoc3 = document.createElement('div');
+                imageDoc3.className = 'folder-item';
+                imageDoc3.innerHTML = `
+                    <div class="folder-item-icon" style="background-image: url('assets/icons/png 64px/69.png');"></div>
+                    <div class="folder-item-label">Citi Team.jpg</div>
+                `;
+                imageDoc3.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.selectFolderItem(imageDoc3);
+                });
+                imageDoc3.addEventListener('dblclick', (e) => {
+                    e.stopPropagation();
+                    this.openImageViewerApp('Citi Team', 'assets/images/Citi3.jpg');
+                });
+                folderContent.appendChild(imageDoc3);
+            }
+
+            selectFolderItem(item) {
+                // Remove selection from all items in this folder
+                const folderContent = item.closest('.folder-content');
+                folderContent.querySelectorAll('.folder-item').forEach(i => i.classList.remove('selected'));
+                
+                // Select the clicked item
+                item.classList.add('selected');
+            }
+
+            openAllItemsInFolder(folderId) {
+                const folderContent = document.getElementById(`folder-content-${folderId}`);
+                if (!folderContent) return;
+
+                const items = folderContent.querySelectorAll('.folder-item');
+                items.forEach(item => {
+                    const dblClickEvent = new MouseEvent('dblclick', {
+                        bubbles: true,
+                        cancelable: true,
+                        view: window
+                    });
+                    item.dispatchEvent(dblClickEvent);
+                });
+            }
+
+            openTextEditApp(documentName) {
+                const windowId = `textedit-${Date.now()}`;
+                const windowElement = this.createTextEditWindow(windowId, documentName);
+                
+                document.getElementById('desktop').appendChild(windowElement);
+                this.windows.push({
+                    id: windowId,
+                    element: windowElement,
+                    zIndex: this.nextZIndex++,
+                    type: 'textedit'
+                });
+
+                this.bringToFront(windowId);
+            }
+
+            openTextEditAppWithContent(documentName, content) {
+                const windowId = `textedit-${Date.now()}`;
+                const windowElement = this.createTextEditWindowWithContent(windowId, documentName, content);
+                
+                document.getElementById('desktop').appendChild(windowElement);
+                this.windows.push({
+                    id: windowId,
+                    element: windowElement,
+                    zIndex: this.nextZIndex++,
+                    type: 'textedit'
+                });
+
+                this.bringToFront(windowId);
+            }
+
+            createTextEditWindow(id, documentName) {
+                const window = document.createElement('div');
+                window.className = 'window';
+                window.id = id;
+                window.style.left = Math.random() * 200 + 50 + 'px';
+                window.style.top = Math.random() * 100 + 50 + 'px';
+                window.style.width = '600px';
+                window.style.height = '500px';
+
+                window.innerHTML = `
+                    <div class="window-title-bar">
+                        <span class="window-title">${documentName} - TextEdit</span>
+                        <div class="window-controls">
+                            <div class="window-control close-button" data-action="close">×</div>
+                            <div class="window-control" data-action="maximize">□</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
+                        <div style="display: flex; flex-direction: column; height: 100%;">
+                            <div style="background: #d0d0d0; border-bottom: 1px solid #808080; padding: 4px 8px; height: 25px;">
+                                <!-- Read-only view -->
+                            </div>
+                            <textarea readonly style="flex: 1; border: none; padding: 8px; font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace; font-size: 12px; resize: none; outline: none; background-color: #fff;"></textarea>
+                        </div>
+                    </div>
+                    <div class="resize-handle resize-nw"></div>
+                    <div class="resize-handle resize-ne"></div>
+                    <div class="resize-handle resize-sw"></div>
+                    <div class="resize-handle resize-se"></div>
+                    <div class="resize-handle resize-n"></div>
+                    <div class="resize-handle resize-s"></div>
+                    <div class="resize-handle resize-w"></div>
+                    <div class="resize-handle resize-e"></div>
+                `;
+
+                // Add event listeners for window controls
+                const closeButton = window.querySelector('.close-button');
+                closeButton.addEventListener('click', () => this.closeWindow(id));
+
+                // Add click listener to bring window to front
+                window.addEventListener('mousedown', (e) => {
+                    if (e.target.closest('.window-control')) return;
+                    this.bringToFront(id);
+                });
+
+                return window;
+            }
+
+            createTextEditWindowWithContent(id, documentName, content) {
+                const window = document.createElement('div');
+                window.className = 'window';
+                window.id = id;
+                window.style.left = Math.random() * 200 + 50 + 'px';
+                window.style.top = Math.random() * 100 + 50 + 'px';
+                window.style.width = '600px';
+                window.style.height = '500px';
+
+                window.innerHTML = `
+                    <div class="window-title-bar">
+                        <span class="window-title">${documentName} - TextEdit</span>
+                        <div class="window-controls">
+                            <div class="window-control close-button" data-action="close">×</div>
+                            <div class="window-control" data-action="maximize">□</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
+                        <div style="display: flex; flex-direction: column; height: 100%;">
+                            <div style="background: #d0d0d0; border-bottom: 1px solid #808080; padding: 4px 8px; height: 25px;">
+                                <!-- Read-only view -->
+                            </div>
+                            <textarea readonly style="flex: 1; border: none; padding: 8px; font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace; font-size: 12px; resize: none; outline: none; background-color: #fff;">${content}</textarea>
+                        </div>
+                    </div>
+                    <div class="resize-handle resize-nw"></div>
+                    <div class="resize-handle resize-ne"></div>
+                    <div class="resize-handle resize-sw"></div>
+                    <div class="resize-handle resize-se"></div>
+                    <div class="resize-handle resize-n"></div>
+                    <div class="resize-handle resize-s"></div>
+                    <div class="resize-handle resize-w"></div>
+                    <div class="resize-handle resize-e"></div>
+                `;
+
+                // Add event listeners for window controls
+                const closeButton = window.querySelector('.close-button');
+                closeButton.addEventListener('click', () => this.closeWindow(id));
+
+                // Add click listener to bring window to front
+                window.addEventListener('mousedown', (e) => {
+                    if (e.target.closest('.window-control')) return;
+                    this.bringToFront(id);
+                });
+
+                return window;
+            }
+
+            openImageViewerApp(imageName, imagePath) {
+                const windowId = `imageviewer-${Date.now()}`;
+                const windowElement = this.createImageViewerWindow(windowId, imageName, imagePath);
+                
+                document.getElementById('desktop').appendChild(windowElement);
+                this.windows.push({
+                    id: windowId,
+                    element: windowElement,
+                    zIndex: this.nextZIndex++,
+                    type: 'imageviewer'
+                });
+
+                this.bringToFront(windowId);
+            }
+
+            createImageViewerWindow(id, imageName, imagePath) {
+                const window = document.createElement('div');
+                window.className = 'window';
+                window.id = id;
+                window.style.left = Math.random() * 200 + 50 + 'px';
+                window.style.top = Math.random() * 100 + 50 + 'px';
+                window.style.width = '500px';
+                window.style.height = '400px';
+
+                const imageContent = imagePath
+                    ? `<img src="${imagePath}" alt="${imageName}" style="max-width: 100%; max-height: 100%; object-fit: contain;" />`
+                    : `<div style="color: #666; font-size: 14px; text-align: center;">
+                                        <div style="margin-bottom: 8px;">📷</div>
+                                        <div>Click "Open Image" to load an image</div>
+                                    </div>`;
+
+                window.innerHTML = `
+                    <div class="window-title-bar">
+                        <span class="window-title">${imageName} - Image Viewer</span>
+                        <div class="window-controls">
+                            <div class="window-control close-button" data-action="close">×</div>
+                            <div class="window-control" data-action="maximize">□</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
+                        <div style="display: flex; flex-direction: column; height: 100%;">
+                            <div style="background: #d0d0d0; border-bottom: 1px solid #808080; padding: 4px 8px; display: flex; gap: 8px;">
+                                <button class="folder-button" onclick="this.parentElement.parentElement.querySelector('.image-display').style.transform = 'scale(1)'">Fit to Window</button>
+                            </div>
+                            <div style="flex: 1; display: flex; align-items: center; justify-content: center; background: #f0f0f0; position: relative;">
+                                <div class="image-display" style="max-width: 100%; max-height: 100%; display: flex; align-items: center; justify-content: center;">
+                                    ${imageContent}
+                                </div>
+                                <input type="file" accept="image/*" style="display: none;" onchange="handleImageLoad(this, this.parentElement.querySelector('.image-display'))" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="resize-handle resize-nw"></div>
+                    <div class="resize-handle resize-ne"></div>
+                    <div class="resize-handle resize-sw"></div>
+                    <div class="resize-handle resize-se"></div>
+                    <div class="resize-handle resize-n"></div>
+                    <div class="resize-handle resize-s"></div>
+                    <div class="resize-handle resize-w"></div>
+                    <div class="resize-handle resize-e"></div>
+                `;
+
+                // Add event listeners for window controls
+                const closeButton = window.querySelector('.close-button');
+                closeButton.addEventListener('click', () => this.closeWindow(id));
+
+                // Add click listener to bring window to front
+                window.addEventListener('mousedown', (e) => {
+                    if (e.target.closest('.window-control') || e.target.closest('.folder-button')) return;
+                    this.bringToFront(id);
+                });
+
+                return window;
+            }
+
+            closeWindow(windowId) {
+                const windowIndex = this.windows.findIndex(w => w.id === windowId);
+                if (windowIndex !== -1) {
+                    const window = this.windows[windowIndex];
+                    window.element.remove();
+                    this.windows.splice(windowIndex, 1);
+                }
+            }
+
+            bringToFront(windowId) {
+                this.windows.forEach(w => {
+                    w.element.classList.remove('active');
+                    w.zIndex = 100;
+                });
+
+                const window = this.windows.find(w => w.id === windowId);
+                if (window) {
+                    window.element.classList.add('active');
+                    window.zIndex = this.nextZIndex++;
+                    window.element.style.zIndex = window.zIndex;
+                }
+            }
+
+            handleMouseDown(e) {
+                const windowElement = e.target.closest('.window');
+                if (!windowElement) return;
+
+                const windowId = windowElement.id;
+                this.bringToFront(windowId);
+
+                // Check if clicking on title bar for dragging
+                if (e.target.closest('.window-title-bar')) {
+                    this.isDragging = true;
+                    this.dragData = {
+                        windowId,
+                        startX: e.clientX,
+                        startY: e.clientY,
+                        startLeft: parseInt(windowElement.style.left),
+                        startTop: parseInt(windowElement.style.top)
+                    };
+                    e.preventDefault();
+                    return;
+                }
+
+                // Check if clicking on resize handle
+                const resizeHandle = e.target.closest('.resize-handle');
+                if (resizeHandle) {
+                    this.isResizing = true;
+                    this.resizeData = {
+                        windowId,
+                        handle: resizeHandle.className.split(' ')[1],
+                        startX: e.clientX,
+                        startY: e.clientY,
+                        startWidth: parseInt(windowElement.style.width),
+                        startHeight: parseInt(windowElement.style.height),
+                        startLeft: parseInt(windowElement.style.left),
+                        startTop: parseInt(windowElement.style.top)
+                    };
+                    e.preventDefault();
+                }
+            }
+
+            handleMouseMove(e) {
+                if (this.isDragging && this.dragData) {
+                    const deltaX = e.clientX - this.dragData.startX;
+                    const deltaY = e.clientY - this.dragData.startY;
+                    
+                    const newLeft = this.dragData.startLeft + deltaX;
+                    const newTop = this.dragData.startTop + deltaY;
+                    
+                    const windowElement = document.getElementById(this.dragData.windowId);
+                    windowElement.style.left = Math.max(0, newLeft) + 'px';
+                    windowElement.style.top = Math.max(24, newTop) + 'px'; // Keep below menu bar
+                }
+
+                if (this.isResizing && this.resizeData) {
+                    const deltaX = e.clientX - this.resizeData.startX;
+                    const deltaY = e.clientY - this.resizeData.startY;
+                    
+                    const windowElement = document.getElementById(this.resizeData.windowId);
+                    const handle = this.resizeData.handle;
+                    
+                    let newWidth = this.resizeData.startWidth;
+                    let newHeight = this.resizeData.startHeight;
+                    let newLeft = this.resizeData.startLeft;
+                    let newTop = this.resizeData.startTop;
+
+                    // Handle different resize directions
+                    if (handle.includes('e')) newWidth += deltaX;
+                    if (handle.includes('w')) {
+                        newWidth -= deltaX;
+                        newLeft += deltaX;
+                    }
+                    if (handle.includes('s')) newHeight += deltaY;
+                    if (handle.includes('n')) {
+                        newHeight -= deltaY;
+                        newTop += deltaY;
+                    }
+
+                    // Apply minimum size constraints
+                    newWidth = Math.max(200, newWidth);
+                    newHeight = Math.max(150, newHeight);
+
+                    // Apply position constraints
+                    newLeft = Math.max(0, newLeft);
+                    newTop = Math.max(24, newTop);
+
+                    windowElement.style.width = newWidth + 'px';
+                    windowElement.style.height = newHeight + 'px';
+                    windowElement.style.left = newLeft + 'px';
+                    windowElement.style.top = newTop + 'px';
+                }
+            }
+
+            handleMouseUp(e) {
+                this.isDragging = false;
+                this.isResizing = false;
+                this.dragData = null;
+                this.resizeData = null;
+            }
+        }
+
+        // Global function for handling image loading
+        function handleImageLoad(input, displayElement) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    displayElement.innerHTML = `<img src="${e.target.result}" alt="Loaded image" style="max-width: 100%; max-height: 100%; object-fit: contain;" />`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Initialize the window manager when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new WindowManager();
+        });
+    </script>
+</body>
+</html>
