@@ -462,6 +462,11 @@
             <div class="icon-image" style="background-image: url('assets/icons/png 64px/instagram.jpg');"></div>
             <div class="icon-label">Instagram</div>
         </div>
+
+        <div class="desktop-icon" style="top: 320px; left: 20px;" data-window-title="Marathons" data-icon="24.png" data-type="folder">
+            <div class="icon-image" style="background-image: url('assets/icons/png 64px/24.png');"></div>
+            <div class="icon-label">Marathons</div>
+        </div>
     </div>
 
     <script>
@@ -546,6 +551,8 @@
                     this.addWatchFolderContent(windowId);
                 } else if (type === 'folder' && title === 'Citi') {
                     this.addCitiFolderContent(windowId);
+                } else if (type === 'folder' && title === 'Marathons') {
+                    this.addMarathonsFolderContent(windowId);
                 } else if (type === 'projects-folder') {
                     this.addProjectFolders(windowId);
                 }
@@ -1168,6 +1175,120 @@ In Development
                     this.openImageViewerApp('Citi Team', 'assets/images/Citi3.jpg');
                 });
                 folderContent.appendChild(imageDoc3);
+            }
+
+            addMarathonsFolderContent(folderId) {
+                const folderContent = document.getElementById(`folder-content-${folderId}`);
+                if (!folderContent) return;
+
+                // Add certificate file
+                const certificateDoc = document.createElement('div');
+                certificateDoc.className = 'folder-item';
+                certificateDoc.innerHTML = `
+                    <div class="folder-item-icon" style="background-image: url('assets/icons/png 64px/10.png');"></div>
+                    <div class="folder-item-label">Miami Marathon 2024.txt</div>
+                `;
+                certificateDoc.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.selectFolderItem(certificateDoc);
+                });
+                certificateDoc.addEventListener('dblclick', (e) => {
+                    e.stopPropagation();
+                    const certificateContent = this.getMarathonCertificateContent();
+                    this.openTextEditAppWithContent('Miami Marathon 2024 Certificate', certificateContent);
+                });
+                folderContent.appendChild(certificateDoc);
+
+                // Add first image file
+                const imageDoc1 = document.createElement('div');
+                imageDoc1.className = 'folder-item';
+                imageDoc1.innerHTML = `
+                    <div class="folder-item-icon" style="background-image: url('assets/icons/png 64px/69.png');"></div>
+                    <div class="folder-item-label">Marathon Pic 1.jpg</div>
+                `;
+                imageDoc1.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.selectFolderItem(imageDoc1);
+                });
+                imageDoc1.addEventListener('dblclick', (e) => {
+                    e.stopPropagation();
+                    this.openImageViewerApp('Marathon Picture 1', 'assets/images/Running1.jpg');
+                });
+                folderContent.appendChild(imageDoc1);
+
+                // Add second image file
+                const imageDoc2 = document.createElement('div');
+                imageDoc2.className = 'folder-item';
+                imageDoc2.innerHTML = `
+                    <div class="folder-item-icon" style="background-image: url('assets/icons/png 64px/69.png');"></div>
+                    <div class="folder-item-label">Marathon Pic 2.jpg</div>
+                `;
+                imageDoc2.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.selectFolderItem(imageDoc2);
+                });
+                imageDoc2.addEventListener('dblclick', (e) => {
+                    e.stopPropagation();
+                    this.openImageViewerApp('Marathon Picture 2', 'assets/images/Running2.jpg');
+                });
+                folderContent.appendChild(imageDoc2);
+
+                // Add "Why I Run" text file
+                const whyRunDoc = document.createElement('div');
+                whyRunDoc.className = 'folder-item';
+                whyRunDoc.innerHTML = `
+                    <div class="folder-item-icon" style="background-image: url('assets/icons/png 64px/10.png');"></div>
+                    <div class="folder-item-label">Why I Run.txt</div>
+                `;
+                whyRunDoc.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.selectFolderItem(whyRunDoc);
+                });
+                whyRunDoc.addEventListener('dblclick', (e) => {
+                    e.stopPropagation();
+                    const whyRunContent = `I didn't start running because of a life-long dream or a bucket list; I started because of an opportunity and a dare.
+
+I ran my first marathon almost on a whim. The feeling of accomplishment was real, but it quickly led to a question: What’s next? The answer wasn't another. For me, the appeal isn't a goal to be checked off; it’s the need for a challenge that scales with my progress. As soon as one distance becomes comfortable, I'm compelled to find the next limit to test. However, I felt like there was more to achieve in 26.2 miles. I would like to finish feeling comfortable and not like I'm dying. 
+
+The Discipline of Solitude
+
+My "why" is intensely private. I’m not running for the social club or the shared journey. Running is my dedicated method of escape and stress relief. It is a healthy, disciplined way to disappear for hours, carving out necessary solitude from the noise and demands of the world. The marathon training schedule guarantees me that time—a purposeful, self-imposed isolation that brings calm and focus.
+
+The Pursuit of Mastery
+
+My first marathon was proof of my mental resilience—I got to the finish line—but it was also a strategic and physical failure.
+
+The first half was strong; the second was a complete physical collapse. I learned the hard way that endurance running is not just about putting in the miles; it's a profound exercise in logistics and precision. You must master pacing, fueling, hydration, and weather.
+
+I am currently training for my second marathon because the first one left me with unfinished business. I didn't lose the mental battle, but I failed to execute the physical strategy. My focus now is not simply to finish, but to master the distance—to bridge that gap between my mental will and my body's performance.
+
+I run to claim the identity of someone who is disciplined, capable, and enduring. I run for the intense satisfaction of facing a monumental task and applying my mind to master the physical strategy required. I run because the true reward isn't the medal; it’s the personal transformation that happens when you refuse to quit on a challenge that broke you once before.`;
+                    this.openTextEditAppWithContent('Why I Run', whyRunContent);
+                });
+                folderContent.appendChild(whyRunDoc);
+            }
+
+            getMarathonCertificateContent() {
+                return `
+    *****************************************************************
+    *                                                               *
+    *                  CERTIFICATE OF COMPLETION                    *
+    *                                                               *
+    *****************************************************************
+
+    This certificate is proudly presented to:
+
+                          BERNARDO LOPEZ LEON
+
+    In recognition of the outstanding achievement of successfully
+    completing the
+
+                 LIFETIME MIAMI MARATHON 2024
+
+    With an official time of: 04:24:09
+
+    *This cetificate was made by myself
+`;
             }
 
             selectFolderItem(item) {
