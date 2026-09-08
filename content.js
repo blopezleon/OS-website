@@ -178,14 +178,19 @@ projects on my journey to invent.`
 
   {
     type: "folder",
-    name: "Watch",
+    name: "Watches",
     icon: "24.png",
     pos: { x: 100, y: 120 },
     children: [
+
       {
-        type: "text",
-        name: "Details.txt",
-        body:
+        type: "folder",
+        name: "NH36 Build",
+        children: [
+          {
+            type: "text",
+            name: "Details.txt",
+            body:
 `Building this watch started with a simple problem:
 
 I could not find a watch I truly loved. The ones I could afford did not excite
@@ -200,9 +205,45 @@ All of the parts were ordered from AliExpress and recycled from old watches.
 Including the tools required and all the materials, the total came out under
 $100. It is powered by a Seiko NH36 movement and has glow in the dark hands.
 The watch band is from an old Lacoste watch.`
+          },
+          { type: "image", name: "Watch Front.jpg", src: "assets/images/IMG_20250921_185254445.jpg" },
+          { type: "image", name: "Watch Back.jpg",  src: "assets/images/IMG_20250921_185333776.jpg" }
+        ]
       },
-      { type: "image", name: "Watch Front.jpg", src: "assets/images/IMG_20250921_185254445.jpg" },
-      { type: "image", name: "Watch Back.jpg",  src: "assets/images/IMG_20250921_185333776.jpg" }
+
+      {
+        type: "folder",
+        name: "Casio AE1200 Mod",
+        children: [
+          {
+            type: "text",
+            name: "Details.txt",
+            body:
+/* DRAFT -- Bernie, edit the details below. */
+`Casio AE1200 Mod
+
+The base:
+A stock Casio AE1200WH -- the "World Time" (a.k.a. the Casio Royale). A cheap,
+near-indestructible digital watch and one of the most modded platforms out
+there, which is exactly why I picked it as a starting point.
+
+The mods:
+- (draft) ...
+- (draft) ...
+- (draft) ...
+
+Why:
+(draft) After building a watch from scratch, I wanted the opposite exercise:
+take something mass-produced and make it feel personal with small, reversible
+changes.
+
+Status:
+In progress. A photo of the finished mod will be added here soon.`
+          },
+          { type: "image", name: "Stock AE1200.jpg", src: "assets/images/Casio-AE1200.jpg" }
+        ]
+      }
+
     ]
   },
 
@@ -261,8 +302,40 @@ With an official time of: 04:24:09
 
 *This certificate was made by myself`
       },
-      { type: "image", name: "Marathon Pic 1.jpg", src: "assets/images/Running1.jpg" },
-      { type: "image", name: "Marathon Pic 2.jpg", src: "assets/images/Running2.jpg" },
+      { type: "image", name: "Miami Pic 1.jpg", src: "assets/images/Running1.jpg" },
+      { type: "image", name: "Miami Pic 2.jpg", src: "assets/images/Running2.jpg" },
+
+      {
+        type: "text",
+        name: "Toronto Waterfront 2025.txt",
+        body:
+/* DRAFT -- Bernie, tweak the wording; the stats are straight off the results card. */
+`Toronto Waterfront Marathon 2025
+
+Race:         TCS Toronto Waterfront Marathon
+Date:         October 19, 2025
+Finish time:  03:33:54
+
+Placement:
+- 1,337th of 7,307 overall
+- 1,118th of 4,986 male
+- 94th of 565 in M18-24
+
+Highlights:
+- Top 100 in my age group (M18-24)
+- Top half overall
+- Negative split -- ran the second half faster than the first
+
+The improvement:
+My first marathon, Miami 2024, I ran 04:24:09 and fell apart in the second
+half. Toronto was the unfinished business from that day. I took just over 50
+minutes off my time, but the number I actually care about is the negative
+split: it means the pacing, fueling, and hydration plan finally held together
+for a full 26.2. Miami proved I could finish. Toronto proved I could race.`
+      },
+      { type: "image", name: "Toronto Stats.png", src: "assets/images/Toronto-Stats.png" },
+      { type: "image", name: "Toronto Medal.jpg", src: "assets/images/Toronto-Medal.jpg" },
+
       {
         type: "text",
         name: "Why I Run.txt",
