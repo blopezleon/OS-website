@@ -337,9 +337,10 @@ take something mass-produced and make it feel personal with small, reversible
 changes.
 
 Status:
-In progress. A photo of the finished mod will be added here soon.`
+Completed -- swapped the stock resin band for a burgundy leather strap.`
           },
-          { type: "image", name: "Stock AE1200.jpg", src: "assets/images/Casio-AE1200.jpg" }
+          { type: "image", name: "Stock AE1200.jpg", src: "assets/images/Casio-AE1200.jpg" },
+          { type: "image", name: "Finished Mod.jpg", src: "assets/images/Casio-AE1200-Mod-Finished.jpg" }
         ]
       }
 
@@ -406,7 +407,9 @@ access levels. While building it, I uncovered a two-year-old bug in the
 shared OpenSearch vector store and authored the remediation plan: migrating
 to a pre-filtering-capable ingestion engine, plus a full re-index and
 backfill.`
-      }
+      },
+      { type: "image", name: "Amazon Spheres.jpg", src: "assets/images/Amazon-Spheres.jpg" },
+      { type: "image", name: "Ready to Launch.jpg", src: "assets/images/Amazon-ReadyToLaunch.jpg" }
     ]
   },
 
