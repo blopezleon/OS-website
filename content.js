@@ -166,6 +166,105 @@ Next Steps:
       },
 
       {
+        type: "folder",
+        name: "Image-to-3D Spatial Reconstruction",
+        children: [
+          {
+            type: "text",
+            name: "Description",
+            body:
+`Image-to-3D Spatial Reconstruction
+
+Project Overview:
+A 2D-image-to-3D reconstruction pipeline running on a Raspberry Pi 4B with a
+camera module, exploring low-level computer vision and spatial reconstruction.
+
+Features:
+- Machine-learning method for single-image reconstruction
+- Image-stitching method for multi-image reconstruction
+- Runs entirely on embedded hardware (Raspberry Pi OS)
+
+Technologies Used:
+- Python
+- OpenCV
+- Raspberry Pi 4B + camera module
+- Command line interface
+
+Status:
+In Development (January 2026 - Present)`
+          }
+        ]
+      },
+
+      {
+        type: "folder",
+        name: "Spatial Eye-Tracking Interface",
+        children: [
+          {
+            type: "text",
+            name: "Description",
+            body:
+`Spatial Eye-Tracking Interface
+
+Project Overview:
+A real-time gaze-tracking prototype for macOS that translates ocular
+landmarks into spatial UI interactions.
+
+Features:
+- Low-latency frame capture via AVFoundation
+- On-device facial landmark detection via the Vision Framework (Apple Neural
+  Engine)
+- Linear Interpolation Low-Pass Filter to denoise sensor data
+- Coordinate-remapping algorithm from normalized device coordinates to
+  screen-space pixels
+
+Technologies Used:
+- SwiftUI
+- Vision Framework
+- Core Graphics
+- AVFoundation
+
+Status:
+In Development (January 2026 - Present)`
+          }
+        ]
+      },
+
+      {
+        type: "folder",
+        name: "Multilingual Vision Quest",
+        children: [
+          {
+            type: "text",
+            name: "Description",
+            body:
+`Multilingual Vision Quest
+
+Project Overview:
+An iOS app that teaches foreign languages through real-time object
+identification, built for the SHPE UF Code for Change hackathon.
+
+Features:
+- Live camera pipeline for real-time object detection
+- Instant vocabulary translations for identified objects
+- Pronunciation guides powered by a vision model
+
+Technologies Used:
+- Swift
+- AVFoundation
+- Vision
+
+Status:
+Completed
+
+Conclusion:
+- Winner, "Best Use of Gemini" -- SHPE UF Code for Change Hackathon
+  (November 2025)`
+          }
+        ]
+      },
+
+      {
         type: "text",
         name: "README.txt",
         body:
@@ -270,6 +369,44 @@ can teach teams about AI tool usage.`
       { type: "image", name: "Citi.jpg",      src: "assets/images/Citi1.jpg" },
       { type: "image", name: "Citi Bike.jpg", src: "assets/images/Citi2.jpg" },
       { type: "image", name: "Citi Team.jpg", src: "assets/images/Citi3.jpg" }
+    ]
+  },
+
+  {
+    type: "folder",
+    name: "Amazon",
+    icon: "24.png",
+    pos: { x: 100, y: 220 },
+    children: [
+      {
+        type: "text",
+        name: "Internship.txt",
+        body:
+`During the summer of 2026, I interned at Amazon in Bellevue, WA as a Software
+Development Engineer Intern.
+
+I designed the Smithy API model and the DynamoDB + S3 data model for "Project
+Builder," a Java service that turned a data insights page into a BRD-for-
+automations tool. I implemented CRUD operations plus a file-ingestion path
+(.docx/PDF/URL) that persists to S3 with DynamoDB metadata for filtered
+retrieval, enforcing tenant isolation through server-constructed
+client-ID-scoped object keys and presigned PUT/GET URLs. I also built the
+React/TypeScript UI and shipped it to production, iterating from
+user-feedback sessions.
+
+I fixed a production bug in a cross-platform (macOS/Windows) workflow-recorder
+app where AI-assistant responses were being dropped by the capture
+preprocessing pipeline. I tracked it down through DOM mutation analysis and
+native file-system watching (Swift FSEvents), then shipped the fix to
+production and validated capture on both platforms.
+
+I also shipped (beta) a team document-sharing feature for a multi-tenant RAG
+chatbot over user-uploaded documents, using JWT-scoped authorization for
+access levels. While building it, I uncovered a two-year-old bug in the
+shared OpenSearch vector store and authored the remediation plan: migrating
+to a pre-filtering-capable ingestion engine, plus a full re-index and
+backfill.`
+      }
     ]
   },
 
